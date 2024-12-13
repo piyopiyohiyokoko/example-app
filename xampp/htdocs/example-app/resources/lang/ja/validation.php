@@ -1,0 +1,47 @@
+<?php
+
+return [
+    'accepted'             => ':attributeを承認してください。',
+    'active_url'           => ':attributeは有効なURLではありません。',
+    'after'                => ':attributeには、:dateより後の日付を指定してください。',
+    'after_or_equal'       => ':attributeには、:date以降の日付を指定してください。',
+    'alpha'                => ':attributeには、アルファベットのみ使用できます。',
+    'alpha_dash'           => ':attributeには、英数字とダッシュ(-)および下線(_)が使用できます。',
+    'alpha_num'            => ':attributeには、英数字のみ使用できます。',
+    'array'                => ':attributeには、配列を指定してください。',
+    'before'               => ':attributeには、:dateより前の日付を指定してください。',
+    'before_or_equal'      => ':attributeには、:date以前の日付を指定してください。',
+    'between'              => [
+        'numeric' => ':attributeには、:minから:maxまでの数値を指定してください。',
+        'file'    => ':attributeには、:min KBから:max KBまでのファイルを指定してください。',
+        'string'  => ':attributeは、:min文字から:max文字にしてください。',
+        'array'   => ':attributeの項目は、:min個から:max個にしてください。',
+    ],
+    'boolean'              => ':attributeには、trueかfalseを指定してください。',
+    'confirmed'            => ':attributeと:attribute(確認)が一致しません。',
+    
+    'required'             => ':attributeは必須項目です。',
+    'regex'                => ':attributeの形式が正しくありません。',
+
+    'attributes' => [
+        'userName' => 'ユーザ名',
+        'email' => 'メールアドレス',
+        'password' => 'パスワード',
+        'passwordConfirm' => 'パスワード(確認用)',
+        'name' => '名前',
+        'address' => '住所',
+        'img' => '顔写真',
+        'comment' => 'コメント',
+        'grade' => '学年',
+        'term' => '学期',
+        'japanese' => '国語',
+        'math' => '数学',
+        'science' => '理科',
+        'social_studies' => '社会',
+        'music' => '音楽',
+        'home_economics' => '家庭科',
+        'english' => '英語',
+        'art' => '美術',
+        'health_and_physical_education' => '保健体育',
+    ],
+];
