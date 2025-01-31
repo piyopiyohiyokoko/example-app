@@ -4,51 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateStudentRequest;
 use DateTime;
 use DateTimeZone;
 
 class CreateStudentController extends Controller
 {
+    protected $student;
+    public function __construct()
+    {
+       $this->student= new Student();
+    }
+
+     public function getIndex()
+    {
+        // 学生登録ビューを呼び出し
+        return view('student/create');
+    }
     /**
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function postCreate(CreateStudentRequest $request)
     {
         // 登録ボタンが押された場合
-        if ($request->isMethod("post") && isset($request->create)) {
 
-            // バリデーション
-            $request->validate([
-                'name' => 'required',
-                'address' => 'required',
-                'img' => 'required|file|mimes:jpg,png',
-            ]);
+         // ファイルを取得
+        $file = $request->file('img');
+        // ファイルを保存(public/uploads に保存)
+        $path = $file->store('', 'public');
 
-            // 現在日時を "YYYY-MM-DD HH:MM:SS" 形式で取得
-            $now = (new DateTime('now', new DateTimeZone('Asia/Tokyo')))->format('Y-m-d H:i:s');
 
-            // ファイルを取得
-            $file = $request->file('img');
-            // ファイルを保存(public/uploads に保存)
-            $path = $file->store('', 'public');
+        $params = $request->except(['_token','img']);
+        $params['img_path'] =  "uploads/" . $path;
 
-            // DBに保存
-            $student = new Student();
-            $student->name = $request->name;
-            $student->address = $request->address;
-            $student->img_path = "uploads/" . $path;
-            $student->comment = $request->comment;
-            $student->created_at = $now;
-            $student->updated_at = $now;
-            $student->save();
+        try{
+            $this->student->createOne($params);
 
-            return back()->with('success', '登録が完了しました');
+        }catch(Exception $e){
+            $e->getMessage();
         }
 
-        // 学生登録ビューを呼び出し
-        return view('student/create', []);
+        return back()->with('success', '登録が完了しました');
     }
 }

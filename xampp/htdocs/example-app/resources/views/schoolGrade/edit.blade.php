@@ -49,8 +49,8 @@
         @endif
         <form action="/editSchoolGrade" method="post">
             @csrf
-            <input type="hidden" name="studentId" id="student-id" value="{{ $student->id }}">
-            <input type="hidden" name="schoolGradeId" id="school-grade-id" value="{{ $schoolGrade->id }}">
+            <input type="hidden" name="student_id" id="student-id" value="{{ $student->id }}">
+            <input type="hidden" name="id" id="school-grade-id" value="{{ $schoolGrade->id }}">
             <div>
                 <label>学年: </label>
                 <select name="grade" id="grade">

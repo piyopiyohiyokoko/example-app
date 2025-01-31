@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\RegistRequest;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Validation\ValidationException;
@@ -11,35 +12,28 @@ use Illuminate\Support\Facades\Hash;
 
 class RegistController extends Controller
 {
+    protected $user;
+    public function __construct()
+    {
+       $this->user= new User();
+    }
+
     /**
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(RegistRequest $request)
     {
         // 登録ボタンが押された場合
         if ($request->isMethod("post") && isset($request->regist)) {
-            try {
-                // バリデーション
-                $request->validate([
-                    'userName' => ['required', 'regex:/^([a-zA-Z0-9]|[^\x01-\x7E\xA1-\xDF])+$/u'],
-                    'email' => ['required', 'regex:/^[a-zA-Z0-9@.]+$/'],
-                    'password' => ['required', 'regex:/^[a-zA-Z0-9]+$/', 'confirmed:passwordConfirm'],
-                    'passwordConfirm' => ['required', 'regex:/^[a-zA-Z0-9]+$/'],
-                ]);
-            } catch (ValidationException $e) {
-                // バリデーションエラーをJSONで返す
-                return response()->json([
-                    'message' => 'バリデーションエラー',
-                    'errors' => $e->errors(),
-                    'status' => 422
-                ], 422);
-            }
 
             // メールアドレスが登録済みでないかチェック
             $emailExists = User::where('email', $request->email)->exists();
+
+            $params = $request->except(['_token']);
+            $params['password'] = Hash::make($request->password);
 
             if ($emailExists) {
                 // 登録済みの場合
@@ -50,17 +44,14 @@ class RegistController extends Controller
                 ], 422);
             }
 
-            // 現在日時を "YYYY-MM-DD HH:MM:SS" 形式で取得
-            $now = (new DateTime('now', new DateTimeZone('Asia/Tokyo')))->format('Y-m-d H:i:s');
+            try{
+                $this->user->createOne($params);
+            
 
-            // DBに保存
-            $user = new User();
-            $user->user_name = $request->userName;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->created_at = $now;
-            $user->updated_at = $now;
-            $user->save();
+            }catch(Exception $e){
+                $e->getMessage();
+            }
+
             return response()->json(['message' => '登録が完了しました', 'status' => 200], 200);
         } else {
             // POST以外はエラーとする

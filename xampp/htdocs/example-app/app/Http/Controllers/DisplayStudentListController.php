@@ -47,21 +47,13 @@ class DisplayStudentListController extends Controller
             // 学生リストが取得できた場合   
             if (is_null($students) === false) {
                 // 学生リスト表示
-                foreach ($students as $student) {
-                    echo '<tr>';
-                    echo '<td>' . $student->grade . '</td>';
-                    echo '<td>' . $student->name . '</td>';
-                    echo '<td>';
-                    echo '<a href="/displayStudentDetail/' . $student->id . '"><button type="button">詳細表示</button></a>';
-                    echo '</td>';
-                    echo '</tr>';
-                }
+            return response()->json($students);
             }
 
             return;
         }
 
         // 学生表示ビューを呼び出し
-        return view('student/displayList', compact('students'));
+        return view('student/displayList');
     }
 }

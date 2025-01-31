@@ -1,0 +1,29 @@
+2025-01-31 23:44:02 0x434 Transaction:
+TRANSACTION 3679, ACTIVE 0 sec updating or deleting
+mysql tables in use 1, locked 1
+4 lock struct(s), heap size 1128, 2 row lock(s), undo log entries 1
+MySQL thread id 59, OS thread handle 1076, query id 493 localhost 127.0.0.1 root Updating
+delete from `students` where `id` = ?
+Foreign key constraint fails for table `student_management`.`school_grades`:
+,
+  CONSTRAINT `school_grades_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
+Trying to delete or update in parent table, in index PRIMARY tuple:
+DATA TUPLE: 10 fields;
+ 0: len 8; hex 0000000000000007; asc         ;;
+ 1: len 6; hex 000000000e5f; asc      _;;
+ 2: len 7; hex 160000014b14a3; asc     K  ;;
+ 3: len 4; hex 80000002; asc     ;;
+ 4: len 2; hex 6b61; asc ka;;
+ 5: len 2; hex 6b61; asc ka;;
+ 6: len 52; hex 75706c6f6164732f336d46346e6132313832674a527539757876693334484d6530474c6a4170355878593536416169502e6a7067; asc uploads/3mF4na2182gJRu9uxvi34HMe0GLjAp5XxY56AaiP.jpg;;
+ 7: len 2; hex 6b61; asc ka;;
+ 8: len 4; hex 679c629e; asc g b ;;
+ 9: len 4; hex 679c62e5; asc g b ;;
+
+But in child table `student_management`.`school_grades`, in index school_grades_student_id_foreign, there is a record:
+PHYSICAL RECORD: n_fields 2; compact format; info bits 0
+ 0: len 8; hex 0000000000000007; asc         ;;
+ 1: len 8; hex 0000000000000005; asc         ;;
+
+
+

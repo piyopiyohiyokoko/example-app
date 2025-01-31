@@ -1,0 +1,1 @@
+`student_management`.`school_grades`, CONSTRAINT `school_grades_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)

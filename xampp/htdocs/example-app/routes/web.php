@@ -9,9 +9,8 @@ Route::get('login', 'App\Http\Controllers\DisplayLoginController');
 Route::get('displayRegist', 'App\Http\Controllers\DisplayRegistController');
 
 // 管理ユーザーログイン
-Route::post('login', 'App\Http\Controllers\LoginController');
+Route::post('login', 'App\Http\Controllers\LoginController@post');
 // 管理ユーザー登録
-Route::get('regist', 'App\Http\Controllers\RegistController');
 Route::post('regist', 'App\Http\Controllers\RegistController');
 
 // セッション管理を行うルート
@@ -28,8 +27,8 @@ Route::middleware('auth')->group(function () {
     // 学生編集画面
     Route::get('displayStudentEdit/{id}', 'App\Http\Controllers\DisplayStudentEditController');
     // 学生登録
-    Route::get('createStudent', 'App\Http\Controllers\CreateStudentController');
-    Route::post('createStudent', 'App\Http\Controllers\CreateStudentController');
+    Route::get('createStudent', 'App\Http\Controllers\CreateStudentController@getIndex');
+    Route::post('createStudent', 'App\Http\Controllers\CreateStudentController@postCreate');
     // 学生編集
     Route::post('editStudent', 'App\Http\Controllers\EditStudentController');
     // 学生削除
