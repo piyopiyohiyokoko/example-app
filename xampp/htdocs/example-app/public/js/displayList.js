@@ -11,26 +11,34 @@ function loadData(order) {
             searchGrade: searchStudentGrade
         } // 並び順をパラメータとして送信
     }).done(function(data) {
+        // データを表示する前にテーブルをクリア
+        $('#data-list').empty();
 
-        var html;
-for (let i = 0; i < data.length; i++) {
-html = `
-<tr>
-<td>${data[i].grade}</td>
-<td>${data[i].name}</td>
-<td>
-    <a href="/displayStudentDetail/${data[i].id}">
-        <button type="button">詳細表示</button>
-    </a>
-</td>
-</tr>
-`;
-            $('#data-list').append(html); // データ表示エリアを更新
+        // 結果がない場合のメッセージ
+        if (data.length === 0) {
+            $('#data-list').append('<tr><td colspan="3">検索結果がありません</td></tr>');
+            return;
+        }
 
-}
-
-
-        //$('#data-list').html(data); // データ表示エリアを更新
+        // データを表示
+        for (let i = 0; i < data.length; i++) {
+            let html = `
+                <tr>
+                    <td>${data[i].grade}</td>
+                    <td>${data[i].name}</td>
+                    <td>
+                        <a href="/displayStudentDetail/${data[i].id}">
+                            <button type="button">詳細表示</button>
+                        </a>
+                    </td>
+                </tr>
+            `;
+            $('#data-list').append(html);
+        }
+    }).fail(function(xhr, status, error) {
+        // エラー処理
+        console.error("データ取得エラー:", error);
+        $('#data-list').empty().append('<tr><td colspan="3">データの取得に失敗しました</td></tr>');
     });
 }
 
@@ -50,4 +58,6 @@ $('#descBtn').click(function() {
 });
 
 // 初期表示で昇順にデータをロード
-loadData('ASC');
+$(document).ready(function() {
+    loadData('ASC');
+});

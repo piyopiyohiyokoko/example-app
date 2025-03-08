@@ -9,16 +9,16 @@ use Illuminate\Http\Request;
 class DisplayStudentDetailController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 学生詳細表示
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\View
      */
-    public function __invoke(Request $request, $id)
+    public function show(Request $request, $id)
     {
         // DBから対象学生データを取得
         $student = Student::findOrFail($id);
-        
+
         // 成績情報
         $schoolGrade = null;
         // 検索ボタンが押された場合
@@ -33,7 +33,7 @@ class DisplayStudentDetailController extends Controller
             // 成績情報が取得できた場合
             if ($schoolGrade != null && $schoolGrade->count() > 0) {
                 return response()->json($schoolGrade);
-            
+
             } else {
                 return response()->json(null);
 

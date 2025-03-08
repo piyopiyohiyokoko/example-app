@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SchoolGrade extends Model
 {
     protected $fillable = [
-        'student_id', 
+        'student_id',
         'grade',
         'term',
         'japanese',
@@ -19,7 +19,7 @@ class SchoolGrade extends Model
         'english',
         'art',
         'health_and_physical_education',
-    ]; 
+    ];
     public function createOne($params){
         // DBに保存
         $school_grade = new SchoolGrade();
@@ -33,5 +33,20 @@ class SchoolGrade extends Model
         $school_grade->fill($params)->save();
     }
 
-    
+    /**
+     * 成績データを削除
+     * @param int $id
+     * @return bool 削除成功時true、失敗時false
+     */
+    public function deleteOne($id){
+        // 対象の成績データを取得
+        $school_grade = SchoolGrade::find($id);
+
+        // 存在する場合のみ削除を実行
+        if($school_grade) {
+            return $school_grade->delete();
+        }
+
+        return false;
+    }
 }

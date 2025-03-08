@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateStudentRequest;
-use DateTime;
-use DateTimeZone;
+use Exception;
 
 class CreateStudentController extends Controller
 {
@@ -16,37 +15,38 @@ class CreateStudentController extends Controller
        $this->student= new Student();
     }
 
-     public function getIndex()
-    {
-        // 学生登録ビューを呼び出し
-        return view('student/create');
-    }
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 学生登録画面表示
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function getIndex()
+    {
+        return view('student.create');
+    }
+
+    /**
+     * 学生登録処理
+     * @param CreateStudentRequest $request バリデーション済みリクエスト
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postCreate(CreateStudentRequest $request)
     {
         // 登録ボタンが押された場合
+        if ($request->isMethod("post") && isset($request->create)) {
+            try {
+                $params = $request->except(['_token', 'create']);
 
-         // ファイルを取得
-        $file = $request->file('img');
-        // ファイルを保存(public/uploads に保存)
-        $path = $file->store('', 'public');
+                // モデルのメソッドを使用して画像処理と学生データの作成を行う
+                $this->student->createOneWithImage($params, $request->file('img'));
 
-
-        $params = $request->except(['_token','img']);
-        $params['img_path'] =  "uploads/" . $path;
-
-        try{
-            $this->student->createOne($params);
-
-        }catch(Exception $e){
-            $e->getMessage();
+                return back()->with('success', '登録が完了しました');
+            } catch (Exception $e) {
+                \Log::error('学生登録エラー: ' . $e->getMessage());
+                return back()->with('error', '登録中にエラーが発生しました: ' . $e->getMessage())->withInput();
+            }
+        } else {
+            // POST以外はエラーとする
+            return back()->with('error', '不正なアクセスです')->withInput();
         }
-
-        return back()->with('success', '登録が完了しました');
     }
 }

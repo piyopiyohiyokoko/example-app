@@ -18,12 +18,11 @@ class EditSchoolGradeController extends Controller
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 成績編集画面表示
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View
      */
-    public function __invoke(EditSchoolGradeRequest $request)
+    public function update(EditSchoolGradeRequest $request)
     {
         // 更新ボタンが押された場合
         if ($request->isMethod("post") && isset($request->edit)) {
@@ -37,7 +36,7 @@ class EditSchoolGradeController extends Controller
                     $this->school_grade->editOne($params);
                 // コミット
                 DB::commit();
-                
+
             } catch (\Exception $e) {
                 // エラー発生時はロールバック
                 DB::rollBack();

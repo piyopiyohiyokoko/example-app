@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Session;
 class DisplaySchoolGradeEditController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 成績編集画面表示
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\View
      */
-    public function __invoke(Request $request, $id)
+    public function edit(Request $request, $id)
     {
         // DBから対象成績データを取得
         $schoolGrade = SchoolGrade::findOrFail($id);

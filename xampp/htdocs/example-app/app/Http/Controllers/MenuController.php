@@ -7,14 +7,11 @@ use Illuminate\Http\Request;
 class MenuController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * メニュー画面表示
+     * @return \Illuminate\Contracts\View\View
      */
-    public function __invoke(Request $request)
+    public function index()
     {
-        // メニュービューを呼び出し
-        return view('menu/index', []);
+        return view('menu.index');
     }
 }

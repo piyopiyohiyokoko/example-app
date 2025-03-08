@@ -5,48 +5,41 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditStudentRequest;
-use DateTime;
-use DateTimeZone;
+use Exception;
 
 class EditStudentController extends Controller
 {
     protected $student;
+
     public function __construct()
     {
-       $this->student= new Student();
+        $this->student = new Student();
     }
-    
+
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 学生編集
+     * @param EditStudentRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function __invoke(EditStudentRequest $request)
+    public function update(EditStudentRequest $request)
     {
         // 更新ボタンが押された場合
         if ($request->isMethod("post") && isset($request->edit)) {
+            try {
+                $params = $request->except(['_token', 'fileChangeFlg', 'edit']);
 
-            $params = $request->except(['_token', 'fileChangeFlg']);
+                // モデルのメソッドを使用して画像処理と学生データの更新を行う
+                $this->student->editOneWithImage(
+                    $params,
+                    $request->file('img'),
+                    $request->fileChangeFlg == "1"
+                );
 
-            // ファイル変更があった場合
-            if($request->fileChangeFlg == "1") {
-                // ファイルを取得
-                $file = $request->file('img');
-                // ファイルを保存(public/uploads に保存)
-                $path = $file->store('', 'public');
-                $student_img_path = "uploads/" . $path;
-                $params['img_path']=$student_img_path;
+                return back()->with('success', '更新が完了しました');
+            } catch (Exception $e) {
+                \Log::error('学生編集エラー: ' . $e->getMessage());
+                return back()->with('error', '更新中にエラーが発生しました: ' . $e->getMessage());
             }
-
-            try{
-                $this->student->editOne($params);
-
-            }catch(Exception $e){
-                $e->getMessage();
-            }
-            return back()->with('success', '更新が完了しました');
-
         } else {
             // POST以外はエラーとする
             return back()->with('error', '不正なアクセスです');

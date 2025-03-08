@@ -8,12 +8,11 @@ use Illuminate\Http\Request;
 class DisplayStudentListController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 学生リスト表示
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function __invoke(Request $request)
+    public function index(Request $request)
     {
         $students = [];
 
@@ -44,7 +43,7 @@ class DisplayStudentListController extends Controller
             // 検索処理実行
             $students = $students->get();
 
-            // 学生リストが取得できた場合   
+            // 学生リストが取得できた場合
             if (is_null($students) === false) {
                 // 学生リスト表示
             return response()->json($students);

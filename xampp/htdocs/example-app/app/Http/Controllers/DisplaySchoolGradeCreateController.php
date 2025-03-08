@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 class DisplaySchoolGradeCreateController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 成績登録画面表示
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Contracts\View\View
      */
-    public function __invoke(Request $request, $id)
+    public function index(Request $request, $id)
     {
         // DBから対象学生データを取得
         $student = Student::findOrFail($id);

@@ -19,12 +19,11 @@ class RegistController extends Controller
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 管理ユーザー登録
+     * @param RegistRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function __invoke(RegistRequest $request)
+    public function index(RegistRequest $request)
     {
         // 登録ボタンが押された場合
         if ($request->isMethod("post") && isset($request->regist)) {
@@ -33,7 +32,6 @@ class RegistController extends Controller
             $emailExists = User::where('email', $request->email)->exists();
 
             $params = $request->except(['_token']);
-            $params['password'] = Hash::make($request->password);
 
             if ($emailExists) {
                 // 登録済みの場合
@@ -46,7 +44,7 @@ class RegistController extends Controller
 
             try{
                 $this->user->createOne($params);
-            
+
 
             }catch(Exception $e){
                 $e->getMessage();

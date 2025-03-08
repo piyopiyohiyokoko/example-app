@@ -15,17 +15,16 @@ class CreateSchoolGradeController extends Controller
     {
        $this->school_grade= new SchoolGrade();
     }
-    
+
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 成績登録
+     * @param CreateSchoolGradeRequest $request
+     * @return \Illuminate\Contracts\View\View
      */
-    public function __invoke(CreateSchoolGradeRequest $request)
+    public function score(CreateSchoolGradeRequest $request)
     {
         // 登録ボタンが押された場合
-        
+
         if ($request->isMethod("post") && isset($request->create)) {
 
             // 対象の成績情報が登録されていないか、データ件数取得
@@ -40,11 +39,11 @@ class CreateSchoolGradeController extends Controller
 
                 try{
                     $this->school_grade->createOne($params);
-    
+
                 }catch(Exception $e){
                     $e->getMessage();
                 }
-    
+
                 return back()->with('success', $request->grade . '学年' . $request->term . '学期の成績を登録しました');
             } else {
                 // 登録済みの成績情報の場合
